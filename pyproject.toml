@@ -1,0 +1,76 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pixeltable-takeout-ingestor"
+version = "0.1.0"
+description = "Ingest Google Takeout and other personal data exports into Pixeltable for multimedia AI processing"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    {name = "Rob", email = "rob@example.com"},
+]
+dependencies = [
+    "pixeltable>=0.4.0",           # Core multimodal AI data infrastructure
+    "python-dotenv>=1.0.0",       # Environment variables
+    "typer>=0.9.0",               # CLI interface
+    "rich>=13.7.0",               # Beautiful CLI output
+    "pydantic>=2.5.0",            # Data validation
+    "openai",                     # For OpenAI models (embeddings, etc)
+    "sentence-transformers",      # Alternative embeddings
+    "httpx>=0.25.0",              # HTTP client for MCP
+    "fastapi>=0.104.0",           # For MCP server
+    "uvicorn[standard]>=0.24.0",  # ASGI server
+    "mcp>=1.0.0",                 # Model Context Protocol
+    "tiktoken",                   # Required by Pixeltable for tokenization
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+    "pre-commit>=3.5.0",
+]
+
+[project.scripts]
+takeout-ingest = "takeout_ingestor.cli:main"
+
+# Tell hatchling where our package is
+[tool.hatch.build.targets.wheel]
+packages = ["takeout_ingestor"]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.7.1",
+    "ruff>=0.0.284",
+    "mypy>=1.5.1",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
